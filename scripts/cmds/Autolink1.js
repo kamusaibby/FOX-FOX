@@ -73,7 +73,7 @@ module.exports = {
 
     } catch (err) {
       console.error("Error fetching video:", err);
-      api.sendMessage("𝐁𝐛𝐲..🐥🎀.", event.threadID, event.messageID);
+      api.sendMessage("‌", event.threadID, event.messageID);
     }
   }
 };
