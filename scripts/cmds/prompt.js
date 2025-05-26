@@ -5,14 +5,14 @@ const tinyurl = require('tinyurl');
 module.exports = {
   config: {
     name: "prompt",
-    aliases: [],
+    aliases: ["prompt"],
     version: "1.0",
     author: "Vex_Kshitiz",
     countDown: 5,
     role: 0,
     shortDescription: "Generate prompt for an image",
     longDescription: "generate prompt for an image",
-    category: "image",
+    category: "tool",
     guide: {
       en: "{p}prompt (reply to image)"
     }

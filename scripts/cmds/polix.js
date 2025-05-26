@@ -1,60 +1,66 @@
+const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
-const axios = require("axios");
+
+const baseApiUrl = async () => {
+  const base = await axios.get("https://raw.githubusercontent.com/mahmudx7/exe/main/baseApiUrl.json");
+  return base.data.mahmud;
+};
 
 module.exports = {
   config: {
-    name: "polix",
-    aliases: [],
-    author: "UPoL",
-    version: "1.0",
-    cooldowns: 5,
+    name: "plx",
+    author: "MahMUD",
+    version: "1.7",
+    cooldowns: 10,
     role: 0,
-    shortDescription: "Generate an image based on a prompt.",
-    longDescription: "Generates an image using the provided prompt.",
-    category: "image",
+    category: "Image gen",
     guide: {
-      en: "{pn} <prompt>"
+      en: "{p}poli <prompt>"
     }
   },
+
   onStart: async function ({ message, args, api, event }) {
-    const prompt = args.join(" ");
-    if (!prompt) {
-      return message.reply("Please provide a prompt.", event.threadID);
+    if (args.length === 0) {
+      return api.sendMessage("❌ | Please provide a prompt.", event.threadID, event.messageID);
     }
-    const wait = message.reply("Generating..... ⏳", event.threadID, event.messageID);
-    const startTime = Date.now(); 
+
+    const prompt = args.join(" ");
+    const cacheDir = path.join(__dirname, "cache");
+    if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir);
+
+    api.sendMessage("𝐖𝐚𝐢𝐭 𝐤𝐨𝐫𝐨 𝐣𝐚𝐧 <😘", event.threadID, event.messageID);
 
     try {
-      const imagineApiUrl = `https://upol-poli.onrender.com/poli?prompt=${encodeURIComponent(prompt)}&ar=16:9`;
-      const imagineResponse = await axios.get(imagineApiUrl, {
-        responseType: "arraybuffer"
-      });
+      const styles = ["ultra detailed", "4k resolution", "realistic lighting", "artstation", "digital painting"];
+      const imagePaths = [];
 
-      const cacheFolderPath = path.join(__dirname, "cache");
-      if (!fs.existsSync(cacheFolderPath)) {
-        fs.mkdirSync(cacheFolderPath);
+      for (let i = 0; i < 4; i++) {
+        const enhancedPrompt = `${prompt}, ${styles[i % styles.length]}`;
+
+        const response = await axios.post(`${await baseApiUrl()}/api/poli/generate`, {
+          prompt: enhancedPrompt
+        }, {
+          responseType: "arraybuffer",
+          headers: {
+            "author": module.exports.config.author
+          }
+        });
+
+        const filePath = path.join(cacheDir, `generated_${Date.now()}_${i}.png`);
+        fs.writeFileSync(filePath, response.data);
+        imagePaths.push(filePath);
       }
 
-      const imagePath = path.join(cacheFolderPath, `${Date.now()}_generated_image.png`);
-      fs.writeFileSync(imagePath, Buffer.from(imagineResponse.data, "binary"));
-
-      const stream = fs.createReadStream(imagePath);
-
-      const endTime = Date.now(); 
-      const timeTaken = ((endTime - startTime) / 1000).toFixed(2); 
- 
-      message.unsend(wait, event.messageID);
-      
+      const attachments = imagePaths.map(p => fs.createReadStream(p));
       message.reply({
-        body: `✅ Successfully generate in ${timeTaken} seconds!`,
-        attachment: stream
-      }, event.threadID, () => {
-        fs.unlinkSync(imagePath); 
+        body: "✅ | Here are images generated from your prompt:",
+        attachment: attachments
       });
+
     } catch (error) {
-      console.error("Error:", error);
-      api.sendMessage("error", event.threadID, event.messageID);
+      console.error("Image generation error:", error);
+      message.reply("❌ | Couldn't generate images. Try again later.");
     }
   }
 };
