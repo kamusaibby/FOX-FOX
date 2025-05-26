@@ -79,14 +79,14 @@ module.exports = {
 
       const finalMessage = `
 ╭───────────────────────╮
-BOT STATUS
+𝗕𝗢𝗧 𝗦𝗧𝗔𝗧𝗨𝗦
 ──────╯
 ╰─────────────────
 
 ┏━━━━━━━━━━━━━━━┓
-┃ 💤 𝖴𝗉𝗍: ${uptimeFormatted}
-┃ ⚡ 𝖯𝗂𝗇𝗀: ${ping}ms
-┃ 👑 𝖮𝗐𝗇𝖾𝗋: Ma Hi
+┃ 💤 𝐔𝐩𝐭: ${uptimeFormatted}
+┃ ⚡ 𝐏𝐢𝐧𝐠: ${ping}𝐌𝐬
+┃ 👑 𝐎𝐰𝐧𝐞𝐫: 卡姆鲁尔
 ┗━━━━━━━━━━━━━━━┛
 
 𝗕𝗼𝘁 𝗶𝘀 𝗮𝗹𝗶𝘃𝗲 𝗮𝗻𝗱 𝗿𝗲𝗮𝗱𝘆 𝘁𝗼 𝗿𝘂𝗹𝗲!
@@ -109,7 +109,7 @@ BOT STATUS
       console.error("Monitor error:", error);
 
       // React with ⏳ and ❎ to user's message in case of error
-      api.setMessageReaction("⏳", event.messageID, event.threadID, true);
+    api.setMessageReaction("⏳", event.messageID, event.threadID, true);
       api.setMessageReaction("❎", event.messageID, event.threadID, true);
 
       return api.sendMessage(`❌ 𝗘𝗿𝗿𝗼𝗿: ${error.response?.status === 429 ? '𝖳𝗈𝗈 𝗆𝖺𝗇𝗒 𝗋𝖾𝗊𝗎𝖾𝗌𝗍𝗌! 𝖳𝗋𝗒 𝖺𝗀𝖺𝗂𝗇 𝗌𝗁𝗈𝗋𝗧𝗅𝗒.' : error.message}`, event.threadID, event.messageID);
