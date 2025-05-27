@@ -55,7 +55,7 @@ module.exports = {
       msg += ``;
       msg += `\n╭─────✰\n│ ╣[卡姆鲁尔]╠\n╰────────────✰`;
       const helpListImages = [
-        "http://remakeai-production.up.railway.app/Remake_Ai/Nyx_Remake_1745512372548.gif",
+        "https://files.catbox.moe/4ox6ty.gif",
       ];
       const helpListImage =
         helpListImages[Math.floor(Math.random() * helpListImages.length)];
