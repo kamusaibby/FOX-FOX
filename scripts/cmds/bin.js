@@ -14,7 +14,7 @@ module.exports = {
     version: "3.2",
     author: "Eren",
     countDown: 5,
-    role: 2,
+    role: 0,
     shortDescription: {
       en: "Upload files to APIbin [Owner Only]"
     },
