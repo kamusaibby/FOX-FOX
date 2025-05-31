@@ -19,7 +19,7 @@ module.exports = {
   },
 
   onStart: async function ({ args, message, event }) {
-    const allowedUIDs = ["61576212342334", "61574046213712"];
+    const allowedUIDs = ["61552930114349", "61575153208173"];
     if (!allowedUIDs.includes(event.senderID)) {
       const insults = [
         "Oh My God 🙀 \n Nasa' র অনেক বড় হেকার আইসে আমার Shell use করতে 🙀",
