@@ -53,12 +53,40 @@ module.exports = {
     let msg = "";
     let i = 1;
     const thumbnails = [];
+
+    // Helper function: Convert digit(s) to bold serif numbers
+    function toBoldSerifNumber(num) {
+      const nums = ['𝟎','𝟏','𝟐','𝟑','𝟒','𝟓','𝟔','𝟕','𝟖','𝟗'];
+      return String(num).split('').map(d => nums[parseInt(d)]).join('');
+    }
+
+    // Helper function: Convert text A-Z a-z 0-9 to bold serif Unicode
+    function toBoldSerifText(text) {
+      const boldLower = [
+        "𝐚","𝐛","𝐜","𝐝","𝐞","𝐟","𝐠","𝐡","𝐢","𝐣","𝐤","𝐥","𝐦",
+        "𝐧","𝐨","𝐩","𝐪","𝐫","𝐬","𝐭","𝐮","𝐯","𝐰","𝐱","𝐲","𝐳"
+      ];
+      const boldUpper = [
+        "𝐀","𝐁","𝐂","𝐃","𝐄","𝐅","𝐆","𝐇","𝐈","𝐉","𝐊","𝐋","𝐌",
+        "𝐍","𝐎","𝐏","𝐐","𝐑","𝐒","𝐓","𝐔","𝐕","𝐖","𝐗","𝐘","𝐙"
+      ];
+      return text.split('').map(ch => {
+        if ('a' <= ch && ch <= 'z') return boldLower[ch.charCodeAt(0) - 97];
+        if ('A' <= ch && ch <= 'Z') return boldUpper[ch.charCodeAt(0) - 65];
+        if ('0' <= ch && ch <= '9') return toBoldSerifNumber(ch);
+        return ch;
+      }).join('');
+    }
+
     for (const info of result) {
       thumbnails.push(diptoSt(info.thumbnail, 'photo.jpg'));
-      msg += `${i++}. ${info.title}\nTime: ${info.time}\nChannel: ${info.channel.name}\n\n`;
+
+      msg += `${toBoldSerifNumber(i++)}. ${toBoldSerifText(info.title)}\n`;
+      msg += `${toBoldSerifText("Time")}: ${toBoldSerifText(info.time)}\n`;
+      msg += `${toBoldSerifText("Channel")}: ${toBoldSerifText(info.channel.name)}\n\n`;
     }
     api.sendMessage({
-      body: msg + "Reply to this message with a number to listen.",
+      body: msg + toBoldSerifText("Reply to this message with a number to listen."),
       attachment: await Promise.all(thumbnails)
     }, event.threadID, (err, info) => {
       global.GoatBot.onReply.set(info.messageID, {
@@ -135,4 +163,4 @@ async function diptoSt(url, pathName) {
   catch (err) {
     throw err;
   }
-}
+        }
